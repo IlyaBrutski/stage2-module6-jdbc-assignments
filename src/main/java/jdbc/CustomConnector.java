@@ -1,44 +1,23 @@
 package jdbc;
 
-import lombok.extern.slf4j.Slf4j;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Objects;
 
-@Slf4j
 public class CustomConnector {
-
-    public Connection getConnection(String driver, String url) {
-        try{
-            Class.forName(driver);
-            Connection connection = DriverManager.getConnection(url);
-            logConnectionStatus(connection);
-            return connection;
-
-        } catch (Exception e) {
-            log.info("Error: " + e.getMessage());
+    public Connection getConnection(String url) {
+        try {
+            return DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
-    public Connection getConnection(String driver, String url, String user, String password) throws SQLException{
-        try{
-            Class.forName(driver);
-            Connection connection = DriverManager.getConnection(url, user, password);
-            logConnectionStatus(connection);
-            return connection;
-
-        } catch (Exception e) {
-            log.info("Error: " + e.getMessage());
+    public Connection getConnection(String url, String user, String password)  {
+        try {
+            return DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return null;
-    }
-
-
-    private void logConnectionStatus(Connection connection){
-        String status = (Objects.nonNull(connection)) ? "Connected to the database."
-                : "Failed to connect to database.";
-        log.info(status);
     }
 }
